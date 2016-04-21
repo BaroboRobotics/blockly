@@ -172,9 +172,6 @@ Blockly.JavaScript.finish = function(code) {
     '     }\n' + 
     '     process.nextTick(loop);\n' + 
     ' });\n\n';
-}
-
-}
   return promiseWhile + promiseTimes + definitions.join('\n\n') + '\n\n\n' + code;
 };
 
