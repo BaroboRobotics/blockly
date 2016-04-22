@@ -52,7 +52,7 @@ Blockly.JavaScript['controls_repeat_ext'] = function(block) {
   }
   code += '.then(function() { \n' + 
           '    return promiseTimes('+endVar+', function() {\n' +
-          '        Promise.resolve()\n' + 
+          '        return Promise.resolve()\n' + 
           '        '+branch + '\n' + 
           '    });\n' + 
           '})\n';
