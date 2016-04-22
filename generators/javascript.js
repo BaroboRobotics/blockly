@@ -148,30 +148,32 @@ Blockly.JavaScript.finish = function(code) {
   Blockly.JavaScript.variableDB_.reset();
   // Add promise loops
   var promiseWhile = 
-    ' var promiseWhile = function(condition, action) {\n' +
-    ' return new Promise( function(resolve, reject) {\n' +
-    '   var loop = function() {\n' + 
-    '       if(!condition()) { resolve(); }\n' + 
-    '       else {\n' + 
-    '           return action().then(loop);\n' + 
-    '       }\n' + 
-    '   }\n' + 
-    '   process.nextTick(loop);\n' + 
-    ' });\n\n';
+    'var promiseWhile = function(condition, action) {\n' +
+    '    return new Promise( function(resolve, reject) {\n' +
+    '        var loop = function() {\n' + 
+    '            if(!condition()) { resolve(); }\n' + 
+    '            else {\n' + 
+    '                return action().then(loop);\n' + 
+    '            }\n' + 
+    '        }\n' + 
+    '        loop();\n' + 
+    '    });\n' +
+    '}\n\n'
 
   var promiseTimes = 
-    ' var promiseTimes = function(n, action) {\n' + 
-    ' var count = 0;\n' + 
-    ' return new Promise( function(resolve, reject) {\n' + 
-    '     var loop = function() {\n' + 
-    '         if(count >= n) { resolve(); }\n' + 
-    '         else {\n' + 
-    '             count++;\n' + 
-    '             return action().then(loop);\n' + 
-    '         }\n' + 
-    '     }\n' + 
-    '     process.nextTick(loop);\n' + 
-    ' });\n\n';
+    'var promiseTimes = function(n, action) {\n' + 
+    '    var count = 0;\n' + 
+    '    return new Promise( function(resolve, reject) {\n' + 
+    '        var loop = function() {\n' + 
+    '            if(count >= n) { resolve(); }\n' + 
+    '            else {\n' + 
+    '                count++;\n' + 
+    '                return action().then(loop);\n' + 
+    '            }\n' + 
+    '        }\n' + 
+    '        loop();\n' + 
+    '    });\n' + 
+    '}\n';
   return promiseWhile + promiseTimes + definitions.join('\n\n') + '\n\n\n' + code;
 };
 
