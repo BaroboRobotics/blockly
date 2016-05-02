@@ -94,12 +94,14 @@ Blockly.JavaScript['controls_for'] = function(block) {
     // All arguments are simple numbers.
     var up = parseFloat(argument0) <= parseFloat(argument1);
 
-    code =  variable0 + '\n' +
-            '.then(function() {\n' + 
+    code =  '.then(function() {\n' + 
+            '    ' + variable0 + ' = ' + argument0 + ';\n' +
             '   return promiseWhile(\n' + 
             '       function(){return ('+ variable0 + (up ? ' <= ' : ' >= ') + argument1 + ');},\n' + 
             '       function() {\n' + 
+            '           return Promise.resolve()\n' + 
             '           '+branch+'\n'+
+            '           .then( function() {\n' + 
             '           '+variable0;
             var step = Math.abs(parseFloat(increment));
             if (step == 1) {
@@ -108,6 +110,7 @@ Blockly.JavaScript['controls_for'] = function(block) {
               code += (up ? ' += ' : ' -= ') + step;
             }
     code += ';\n';
+    code += '           })\n';
     code += '       });\n' + 
             '})\n'
   } else {
