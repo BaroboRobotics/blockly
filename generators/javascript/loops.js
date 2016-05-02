@@ -93,18 +93,25 @@ Blockly.JavaScript['controls_for'] = function(block) {
       Blockly.isNumber(increment)) {
     // All arguments are simple numbers.
     var up = parseFloat(argument0) <= parseFloat(argument1);
-    code = 'for (' + variable0 + ' = ' + argument0 + '; ' +
-        variable0 + (up ? ' <= ' : ' >= ') + argument1 + '; ' +
-        variable0;
-    var step = Math.abs(parseFloat(increment));
-    if (step == 1) {
-      code += up ? '++' : '--';
-    } else {
-      code += (up ? ' += ' : ' -= ') + step;
-    }
-    code += ') {\n' + branch + '}\n';
+
+    code =  variable0 + '\n' +
+            '.then(function() {\n' + 
+            '   return promiseWhile(\n' + 
+            '       function(){return ('+ variable0 + (up ? ' <= ' : ' >= ') + argument1 + ');},\n' + 
+            '       function() {\n' + 
+            '           '+branch+'\n'+
+            '           '+variable0;
+            var step = Math.abs(parseFloat(increment));
+            if (step == 1) {
+              code += up ? '++' : '--';
+            } else {
+              code += (up ? ' += ' : ' -= ') + step;
+            }
+    code += ';\n';
+    code += '       });\n' + 
+            '})\n'
   } else {
-    code = '';
+    code = '.then(function() {\n';
     // Cache non-trivial values to variables to prevent repeated look-ups.
     var startVar = argument0;
     if (!argument0.match(/^\w+$/) && !Blockly.isNumber(argument0)) {
@@ -131,12 +138,29 @@ Blockly.JavaScript['controls_for'] = function(block) {
     code += 'if (' + startVar + ' > ' + endVar + ') {\n';
     code += Blockly.JavaScript.INDENT + incVar + ' = -' + incVar + ';\n';
     code += '}\n';
+
+    code +=
+          'return promiseWhile(\n'
+        + '    function() {\n'
+        + '        return ' + incVar + ' >= 0 ? ' +
+                   variable0 + ' <= ' + endVar + ' : ' +
+                   variable0 + ' >= ' + endVar + ';\n' +
+          '    },\n' +
+          '    function() {\n' +
+          '        '+branch+'\n' +
+          '        '+variable0 + ' += ' + incVar + ';\n' +
+          '    });\n';
+
+/*
     code += 'for (' + variable0 + ' = ' + startVar + ';\n' +
         '     ' + incVar + ' >= 0 ? ' +
         variable0 + ' <= ' + endVar + ' : ' +
         variable0 + ' >= ' + endVar + ';\n' +
         '     ' + variable0 + ' += ' + incVar + ') {\n' +
         branch + '}\n';
+*/
+
+    code += '})\n'; // end 'then' continuation function
   }
   return code;
 };
