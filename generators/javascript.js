@@ -174,7 +174,8 @@ Blockly.JavaScript.finish = function(code) {
     '        loop();\n' + 
     '    });\n' + 
     '}\n';
-  return promiseWhile + promiseTimes + definitions.join('\n\n') + '\n\n\n' + code;
+  return promiseWhile + promiseTimes + definitions.join('\n\n') + '\n\n\n' + 
+         'Promise.resolve()\n' + code;
 };
 
 /**
