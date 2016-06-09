@@ -206,9 +206,9 @@ Blockly.JavaScript['controls_flow_statements'] = function(block) {
   // Flow statements: continue, break.
   switch (block.getFieldValue('FLOW')) {
     case 'BREAK':
-      return 'break;\n';
-    case 'CONTINUE':
-      return 'continue;\n';
+      return '.then( function() { blockly_loop_break_flag = true; return Promise.resolve(); })';
+    //case 'CONTINUE':
+      //return 'continue;\n';
   }
   throw 'Unknown flow statement.';
 };

@@ -148,10 +148,12 @@ Blockly.JavaScript.finish = function(code) {
   Blockly.JavaScript.variableDB_.reset();
   // Add promise loops
   var promiseWhile = 
+    'var blockly_loop_break_flag = false;\n' + 
     'var promiseWhile = function(condition, action) {\n' +
+    '    blockly_loop_break_flag = false;\n' + 
     '    return new Promise( function(resolve, reject) {\n' +
     '        var loop = function() {\n' + 
-    '            if(!condition()) { resolve(); }\n' + 
+    '            if(!condition() || blockly_loop_break_flag) { blockly_loop_break_flag = false; resolve(); }\n' + 
     '            else {\n' + 
     '                return action().then(loop);\n' + 
     '            }\n' + 
@@ -162,10 +164,11 @@ Blockly.JavaScript.finish = function(code) {
 
   var promiseTimes = 
     'var promiseTimes = function(n, action) {\n' + 
+    '    blockly_loop_break_flag = false;\n' + 
     '    var count = 0;\n' + 
     '    return new Promise( function(resolve, reject) {\n' + 
     '        var loop = function() {\n' + 
-    '            if(count >= n) { resolve(); }\n' + 
+    '            if((count >= n) || blockly_loop_break_flag) { blockly_loop_break_flag = false; resolve(); }\n' + 
     '            else {\n' + 
     '                count++;\n' + 
     '                return action().then(loop);\n' + 
