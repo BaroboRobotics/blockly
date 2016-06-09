@@ -46,7 +46,10 @@ Blockly.JavaScript['procedures_defreturn'] = function(block) {
   var returnValue = Blockly.JavaScript.valueToCode(block, 'RETURN',
       Blockly.JavaScript.ORDER_NONE) || '';
   if (returnValue) {
-    returnValue = '  return ' + returnValue + ';\n';
+    returnValue = 
+        '.then( function() { return new Promise( function( resolve, reject ) {\n' +
+        '   resolve('+returnValue+');\n' + 
+        '}); });';
   }
   var args = [];
   for (var x = 0; x < block.arguments_.length; x++) {

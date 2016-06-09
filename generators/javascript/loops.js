@@ -73,7 +73,17 @@ Blockly.JavaScript['controls_whileUntil'] = function(block) {
   if (until) {
     argument0 = '!' + argument0;
   }
-  return 'while (' + argument0 + ') {\n' + branch + '}\n';
+  var code;
+  code = '.then(function() {\n' + 
+         '    return promiseWhile( \n' + 
+         '        function() { return ( '+argument0+' ) },\n' +
+         '        function() {\n' + 
+         '            return Promise.resolve()\n' + 
+         '            '+branch+'\n' + 
+         '        }\n' + 
+         '    );\n' + 
+         '})\n';
+  return code;
 };
 
 Blockly.JavaScript['controls_for'] = function(block) {
