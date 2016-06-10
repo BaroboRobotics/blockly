@@ -231,8 +231,12 @@ Blockly.JavaScript['text_print'] = function(block) {
   var argument0 = Blockly.JavaScript.valueToCode(block, 'TEXT',
       Blockly.JavaScript.ORDER_NONE) || '\'\'';
   return '.then( function() { \n' + 
-         '    window.alert(' + argument0 + ');\n' + 
-         '    return Promise.resolve();\n' +
+         '    var con = document.getElementById("console");\n' + 
+         '    if(con) {\n' + 
+         '        con.innerText = con.innerText + '+argument0+' + "\\n";\n' + 
+         '    }\n' + 
+         '    console.log('+argument0+');\n' + 
+         '    return Promise.resolve();\n' + 
          '})\n';
 };
 
