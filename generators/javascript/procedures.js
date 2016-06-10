@@ -99,11 +99,9 @@ Blockly.JavaScript['procedures_callnoreturn'] = function(block) {
     args[x] = Blockly.JavaScript.valueToCode(block, 'ARG' + x,
         Blockly.JavaScript.ORDER_COMMA) || 'null';
   }
-  var code = '.then( function() { return new Promise( function( resolve, reject) {\n' + 
-             '    '+funcName + '(' + args.join(', ') + ');\n' + 
-             '    resolve();\n' +
-             '}); })\n';
-            
+  var code = '.then( function() {\n' + 
+             '    return '+funcName+'(' + argse.join(', ') + ');\n' +
+             '})\n';
   return code;
 };
 
@@ -117,10 +115,10 @@ Blockly.JavaScript['procedures_ifreturn'] = function(block) {
   if (block.hasReturnValue_) {
     var value = Blockly.JavaScript.valueToCode(block, 'VALUE',
         Blockly.JavaScript.ORDER_NONE) || 'null';
-    code += '    function_return_value = '+value+';\n' + 
-            '    return Promise.reject("return");';
+    code += '        funcResolve('+value+');\n' + 
+            '        return Promise.reject("return");\n';
   } else {
-    code += '    return Promise.reject("return");\n';
+    code += '        return Promise.reject("return");\n';
   }
   code += '    } else {\n' + 
           '        return Promise.resolve();\n' + 
