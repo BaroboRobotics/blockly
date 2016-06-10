@@ -47,9 +47,10 @@ Blockly.JavaScript['procedures_defreturn'] = function(block) {
       Blockly.JavaScript.ORDER_NONE) || '';
   if (returnValue) {
     returnValue = 
-        '.then( function() { return new Promise( function( resolve, reject ) {\n' +
-        '   resolve('+returnValue+');\n' + 
-        '}); });';
+        '.then( function() { \n' + 
+        '   funcResolve('+returnValue+');\n' + 
+        '   return Promise.reject("return");\n' + 
+        '})\n';
   }
   var args = [];
   for (var x = 0; x < block.arguments_.length; x++) {
@@ -57,7 +58,15 @@ Blockly.JavaScript['procedures_defreturn'] = function(block) {
         Blockly.Variables.NAME_TYPE);
   }
   var code = 'function ' + funcName + '(' + args.join(', ') + ') {\n' +
-      branch + returnValue + '}';
+      '    return new Promise( function(funcResolve, funcReject) {\n' + 
+      '        Promise.resolve()\n' + 
+      '        '+ branch + returnValue + 
+      '        .catch( function(reason) {\n' +
+      '            if(reason == "break" || reason == "return") {} \n' +
+      '            else {return Promise.reject(reason);}\n' + 
+      '        } );\n' +
+      '    });\n' + 
+      '}\n';
   code = Blockly.JavaScript.scrub_(block, code);
   Blockly.JavaScript.definitions_[funcName] = code;
   return null;
@@ -90,7 +99,11 @@ Blockly.JavaScript['procedures_callnoreturn'] = function(block) {
     args[x] = Blockly.JavaScript.valueToCode(block, 'ARG' + x,
         Blockly.JavaScript.ORDER_COMMA) || 'null';
   }
-  var code = funcName + '(' + args.join(', ') + ');\n';
+  var code = '.then( function() { return new Promise( function( resolve, reject) {\n' + 
+             '    '+funcName + '(' + args.join(', ') + ');\n' + 
+             '    resolve();\n' +
+             '}); })\n';
+            
   return code;
 };
 
@@ -98,14 +111,19 @@ Blockly.JavaScript['procedures_ifreturn'] = function(block) {
   // Conditionally return value from a procedure.
   var condition = Blockly.JavaScript.valueToCode(block, 'CONDITION',
       Blockly.JavaScript.ORDER_NONE) || 'false';
-  var code = 'if (' + condition + ') {\n';
+  var code;
+  code = '.then( function() { \n' + 
+         '    if (' + condition + ') {\n';
   if (block.hasReturnValue_) {
     var value = Blockly.JavaScript.valueToCode(block, 'VALUE',
         Blockly.JavaScript.ORDER_NONE) || 'null';
-    code += '  return ' + value + ';\n';
+    code += '    function_return_value = '+value+';\n' + 
+            '    return Promise.reject("return");';
   } else {
-    code += '  return;\n';
+    code += '    return Promise.reject("return");\n';
   }
-  code += '}\n';
+  code += '    } else {\n' + 
+          '        return Promise.resolve();\n' + 
+          '    }\n})\n';
   return code;
 };
