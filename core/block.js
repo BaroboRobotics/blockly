@@ -785,6 +785,13 @@ Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
   }
 };
 
+Blockly.Block.prototype.outputType = function() {
+    if(this.outputConnection) {
+        return this.outputConnection.getType();
+    }
+    return undefined;
+}
+
 /**
  * Set whether value inputs are arranged horizontally or vertically.
  * @param {boolean} newBoolean True if inputs are horizontal.

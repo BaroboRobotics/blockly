@@ -723,6 +723,10 @@ Blockly.Connection.prototype.setCheck = function(check) {
   return this;
 };
 
+Blockly.Connection.prototype.getType = function() {
+    return this.check_[0];
+}
+
 /**
  * Change a connection's shadow block.
  * @param {Element} shadow DOM representation of a block or null.

@@ -42,10 +42,5 @@ Blockly.Ch['variables_set'] = function(block) {
       Blockly.Ch.ORDER_ASSIGNMENT) || '0';
   var varName = Blockly.Ch.variableDB_.getName(
       block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
-  return '.then( function() {\n' +
-         '    return Promise.resolve('+argument0+')\n' + 
-         '    .then( function( assignment_argument ) {\n' + 
-         '        '+varName+' = assignment_argument;\n' +
-         '    });\n' + 
-         '})\n';
+  return varName + ' = ' + argument0 + ';\n';
 };
