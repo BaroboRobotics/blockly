@@ -48,14 +48,11 @@ Blockly.Ch['controls_repeat_ext'] = function(block) {
   if (!repeats.match(/^\w+$/) && !Blockly.isNumber(repeats)) {
     var endVar = Blockly.Ch.variableDB_.getDistinctName(
         'repeat_end', Blockly.Variables.NAME_TYPE);
-    code += 'var ' + endVar + ' = ' + repeats + ';\n';
+    code += 'int ' + endVar + ' = ' + repeats + ';\n';
   }
-  code += '.then(function() { \n' + 
-          '    return promiseTimes('+endVar+', function() {\n' +
-          '        return Promise.resolve()\n' + 
-          '        '+branch + '\n' + 
-          '    });\n' + 
-          '})\n';
+  code += 'for( int '+loopVar+' = 0; '+loopVar+' < '+endVar+'; '+loopVar+'++) {\n' + 
+              branch +
+          '}\n';
   return code;
 };
 
@@ -74,15 +71,9 @@ Blockly.Ch['controls_whileUntil'] = function(block) {
     argument0 = '!' + argument0;
   }
   var code;
-  code = '.then(function() {\n' + 
-         '    return promiseWhile( \n' + 
-         '        function() { return ( '+argument0+' ) },\n' +
-         '        function() {\n' + 
-         '            return Promise.resolve()\n' + 
-         '            '+branch+'\n' + 
-         '        }\n' + 
-         '    );\n' + 
-         '})\n';
+  code = 'while( '+argument0+') {\n' + 
+         branch +
+         '}\n';
   return code;
 };
 
@@ -103,28 +94,18 @@ Blockly.Ch['controls_for'] = function(block) {
       Blockly.isNumber(increment)) {
     // All arguments are simple numbers.
     var up = parseFloat(argument0) <= parseFloat(argument1);
-
-    code =  '.then(function() {\n' + 
-            '    ' + variable0 + ' = ' + argument0 + ';\n' +
-            '   return promiseWhile(\n' + 
-            '       function(){return ('+ variable0 + (up ? ' <= ' : ' >= ') + argument1 + ');},\n' + 
-            '       function() {\n' + 
-            '           return Promise.resolve()\n' + 
-            '           '+branch+'\n'+
-            '           .then( function() {\n' + 
-            '           '+variable0;
-            var step = Math.abs(parseFloat(increment));
-            if (step == 1) {
-              code += up ? '++' : '--';
-            } else {
-              code += (up ? ' += ' : ' -= ') + step;
-            }
-    code += ';\n';
-    code += '           })\n';
-    code += '       });\n' + 
-            '})\n'
+    code = 'for (' + variable0 + ' = ' + argument0 + '; ' +
+        variable0 + (up ? ' <= ' : ' >= ') + argument1 + '; ' +
+        variable0;
+    var step = Math.abs(parseFloat(increment));
+    if (step == 1) {
+      code += up ? '++' : '--';
+    } else {
+      code += (up ? ' += ' : ' -= ') + step;
+    }
+    code += ') {\n' + branch + '}\n';
   } else {
-    code = '.then(function() {\n';
+    code = '';
     // Cache non-trivial values to variables to prevent repeated look-ups.
     var startVar = argument0;
     if (!argument0.match(/^\w+$/) && !Blockly.isNumber(argument0)) {
@@ -151,29 +132,12 @@ Blockly.Ch['controls_for'] = function(block) {
     code += 'if (' + startVar + ' > ' + endVar + ') {\n';
     code += Blockly.Ch.INDENT + incVar + ' = -' + incVar + ';\n';
     code += '}\n';
-
-    code +=
-          'return promiseWhile(\n'
-        + '    function() {\n'
-        + '        return ' + incVar + ' >= 0 ? ' +
-                   variable0 + ' <= ' + endVar + ' : ' +
-                   variable0 + ' >= ' + endVar + ';\n' +
-          '    },\n' +
-          '    function() {\n' +
-          '        '+branch+'\n' +
-          '        '+variable0 + ' += ' + incVar + ';\n' +
-          '    });\n';
-
-/*
-    code += 'for (' + variable0 + ' = ' + startVar + ';\n' +
-        '     ' + incVar + ' >= 0 ? ' +
+    code += 'for (' + variable0 + ' = ' + startVar + '; ' +
+        incVar + ' >= 0 ? ' +
         variable0 + ' <= ' + endVar + ' : ' +
-        variable0 + ' >= ' + endVar + ';\n' +
-        '     ' + variable0 + ' += ' + incVar + ') {\n' +
+        variable0 + ' >= ' + endVar + '; ' +
+        variable0 + ' += ' + incVar + ') {\n' +
         branch + '}\n';
-*/
-
-    code += '})\n'; // end 'then' continuation function
   }
   return code;
 };
@@ -206,9 +170,9 @@ Blockly.Ch['controls_flow_statements'] = function(block) {
   // Flow statements: continue, break.
   switch (block.getFieldValue('FLOW')) {
     case 'BREAK':
-      return '.then( function() { blockly_loop_break_flag = true; return Promise.resolve(); })';
-    //case 'CONTINUE':
-      //return 'continue;\n';
+      return 'break;\n';
+    case 'CONTINUE':
+      return 'continue;\n';
   }
   throw 'Unknown flow statement.';
 };
