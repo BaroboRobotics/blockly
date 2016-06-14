@@ -112,10 +112,14 @@ Blockly.Ch.init = function(workspace) {
     var type = 'int';
     if (outputType[1] == 'Linkbot') {
       type = 'CLinkbotI';
+      defvars[i] = 'double '+Blockly.Ch.variableDB_.getName(outputType[0],
+        Blockly.Variables.NAME_TYPE)+'_wheelDiameter = 3.5;\n' + 
+        'double '+Blockly.Ch.variableDB_.getName(outputType[0],
+        Blockly.Variables.NAME_TYPE)+'_trackWidth = 3.7;\n';
     } else if (outputType[1] == 'Number') {
       type = 'double';
     }
-    defvars[i] = type + ' ' + 
+    defvars[i] += type + ' ' + 
         Blockly.Ch.variableDB_.getName(outputType[0],
         Blockly.Variables.NAME_TYPE) + ';';
   }
