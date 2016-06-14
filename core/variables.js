@@ -94,7 +94,10 @@ Blockly.Variables.allVariablesTypes = function(root) {
       // Variable name may be null if the block is only half-built.
       if (varName) {
         variableHash[varName.toLowerCase()] = varName;
-        variableTypes.push([varName, blocks[x].getInputTargetBlock('VALUE').outputType()]);
+        var inputBlock = blocks[x].getInputTargetBlock('VALUE');
+        if(inputBlock) {
+          variableTypes.push([varName, inputBlock.outputType()]);
+        }
       }
     }
   }
