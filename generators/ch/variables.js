@@ -40,6 +40,10 @@ Blockly.Ch['variables_set'] = function(block) {
   // Variable setter.
   var argument0 = Blockly.Ch.valueToCode(block, 'VALUE',
       Blockly.Ch.ORDER_ASSIGNMENT) || '0';
+  console.log("variables_set:" + argument0);
+  if( argument0 == 'BLOCKLY_NO_SET' ) {
+    return '';
+  }
   var varName = Blockly.Ch.variableDB_.getName(
       block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
   return varName + ' = ' + argument0 + ';\n';
