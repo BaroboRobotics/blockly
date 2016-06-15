@@ -78,6 +78,7 @@ Blockly.Python.ORDER_LOGICAL_OR = 14;       // or
 Blockly.Python.ORDER_CONDITIONAL = 15;      // if else
 Blockly.Python.ORDER_LAMBDA = 16;           // lambda
 Blockly.Python.ORDER_NONE = 99;             // (...)
+Blockly.Python.INDENT = '    ';
 
 /**
  * Initialise the database of variable names.
@@ -87,6 +88,7 @@ Blockly.Python.init = function(workspace) {
   /**
    * Empty loops or conditionals are not allowed in Python.
    */
+  Blockly.Python.INDENT = '    ';
   Blockly.Python.PASS = this.INDENT + 'pass\n';
   // Create a dictionary of definitions to be printed before the code.
   Blockly.Python.definitions_ = Object.create(null);
