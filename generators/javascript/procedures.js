@@ -100,7 +100,7 @@ Blockly.JavaScript['procedures_callnoreturn'] = function(block) {
         Blockly.JavaScript.ORDER_COMMA) || 'null';
   }
   var code = '.then( function() {\n' + 
-             '    return '+funcName+'(' + argse.join(', ') + ');\n' +
+             '    return '+funcName+'(' + args.join(', ') + ');\n' +
              '})\n';
   return code;
 };
