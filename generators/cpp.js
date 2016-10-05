@@ -138,6 +138,7 @@ Blockly.Cpp.finish = function(code) {
   for (var name in Blockly.Cpp.definitions_) {
     definitions.push(Blockly.Cpp.definitions_[name]);
   }
+  console.log('Definitions: ' + definitions);
   // Clean up temporary data.
   delete Blockly.Cpp.definitions_;
   delete Blockly.Cpp.functionNames_;
