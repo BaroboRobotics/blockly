@@ -97,6 +97,8 @@ Blockly.Variables.allVariablesTypes = function(root) {
         var inputBlock = blocks[x].getInputTargetBlock('VALUE');
         if(inputBlock) {
           variableTypes.push([varName, inputBlock.outputType()]);
+        } else {
+          variableTypes.push([varName, 'Number']);
         }
       }
     }

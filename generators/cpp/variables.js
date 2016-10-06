@@ -40,7 +40,6 @@ Blockly.Cpp['variables_set'] = function(block) {
   // Variable setter.
   var argument0 = Blockly.Cpp.valueToCode(block, 'VALUE',
       Blockly.Cpp.ORDER_ASSIGNMENT) || '0';
-  console.log("variables_set:" + argument0);
   if( argument0 == 'BLOCKLY_NO_SET' ) {
     return '';
   }

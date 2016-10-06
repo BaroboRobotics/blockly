@@ -118,8 +118,10 @@ Blockly.Cpp.init = function(workspace) {
         Blockly.Variables.NAME_TYPE)+'_trackWidth = 3.7;\n';
     } else if (outputType[1] == 'Number') {
       type = 'double';
+    } else if (outputType[1] == 'String') {
+      type = 'std::string';
     }
-    defvars[i] += type + ' ' + 
+    defvars[i] = type + ' ' + 
         Blockly.Cpp.variableDB_.getName(outputType[0],
         Blockly.Variables.NAME_TYPE) + ';';
   }
@@ -138,7 +140,6 @@ Blockly.Cpp.finish = function(code) {
   for (var name in Blockly.Cpp.definitions_) {
     definitions.push(Blockly.Cpp.definitions_[name]);
   }
-  console.log('Definitions: ' + definitions);
   // Clean up temporary data.
   delete Blockly.Cpp.definitions_;
   delete Blockly.Cpp.functionNames_;
