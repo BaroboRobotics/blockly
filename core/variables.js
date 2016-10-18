@@ -95,9 +95,11 @@ Blockly.Variables.allVariablesTypes = function(root) {
       if (varName) {
         variableHash[varName.toLowerCase()] = varName;
         var inputBlock = blocks[x].getInputTargetBlock('VALUE');
+        var connectionExists = (blocks[x].getInput('VALUE') && blocks[x].getInput('VALUE').connection);
         if(inputBlock) {
           variableTypes.push([varName, inputBlock.outputType()]);
-        } else {
+        } 
+        else if(connectionExists) {
           variableTypes.push([varName, 'Number']);
         }
       }
