@@ -88,9 +88,11 @@ Blockly.Variables.allVariablesTypes = function(root) {
   var variableTypes = [];
   // Iterate through every block and add each variable to the hash.
   for (var x = 0; x < blocks.length; x++) {
-    var blockVariables = blocks[x].getVars();
+    var blockVariables = blocks[x].getVarsTypes();
     for (var y = 0; y < blockVariables.length; y++) {
-      var varName = blockVariables[y];
+      var varName = blockVariables[y][0];
+      console.log(varName);
+      console.log(blockVariables[y][1]);
       // Variable name may be null if the block is only half-built.
       if (varName) {
         variableHash[varName.toLowerCase()] = varName;
@@ -98,8 +100,13 @@ Blockly.Variables.allVariablesTypes = function(root) {
         var connectionExists = (blocks[x].getInput('VALUE') && blocks[x].getInput('VALUE').connection);
         if(inputBlock) {
           variableTypes.push([varName, inputBlock.outputType()]);
-        } 
-        else if(connectionExists) {
+        } else if(connectionExists) {
+          variableTypes.push([varName, 'Number']);
+        } else if ( blockVariables[y][1] && (blockVariables[y][1] == 'None' ) ) {
+          // Do nothing
+        } else if ( blockVariables[y][1] ) {
+          variableTypes.push([varName, blockVariables[y][1]]);
+        } else if ( !blockVariables[y][1] ) {
           variableTypes.push([varName, 'Number']);
         }
       }

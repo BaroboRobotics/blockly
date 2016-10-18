@@ -121,6 +121,9 @@ Blockly.Cpp.init = function(workspace) {
     } else if (outputType[1] == 'String') {
       type = 'std::string';
     }
+    } else if (outputType[1] == 'Integer') {
+      type = 'int';
+    }
     defvars[i] = type + ' ' + 
         Blockly.Cpp.variableDB_.getName(outputType[0],
         Blockly.Variables.NAME_TYPE) + ';';

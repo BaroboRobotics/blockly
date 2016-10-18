@@ -640,6 +640,26 @@ Blockly.Block.prototype.getVars = function() {
 };
 
 /**
+ * Return all variables and type information referenced by this block.
+ * @return {!Array.<{string,string}>} List of variable names.
+ */
+Blockly.Block.prototype.getVarsTypes = function() {
+  var vars = [];
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    for (var j = 0, field; field = input.fieldRow[j]; j++) {
+      if (field instanceof Blockly.FieldVariable) {
+        if (field.typeInfo) {
+          vars.push([field.getValue(), field.typeInfo]);
+        } else {
+          vars.push([field.getValue(), null]);
+        }
+      }
+    }
+  }
+  return vars;
+};
+
+/**
  * Notification that a variable is renaming.
  * If the name matches one of this block's variables, rename it.
  * @param {string} oldName Previous name of variable.
