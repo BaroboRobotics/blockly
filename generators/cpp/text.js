@@ -233,7 +233,7 @@ Blockly.Cpp['text_print'] = function(block) {
   // Print statement.
   var argument0 = Blockly.Cpp.valueToCode(block, 'TEXT',
       Blockly.Cpp.ORDER_NONE) || '\"\"';
-  return 'std::cout << ' + argument0 + ' << std::endl;';
+  return 'std::cout << ' + argument0 + ' << std::endl;\n';
 };
 
 Blockly.Cpp['text_prompt_ext'] = function(block) {
