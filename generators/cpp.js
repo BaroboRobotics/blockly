@@ -105,10 +105,14 @@ Blockly.Cpp.init = function(workspace) {
     Blockly.Cpp.variableDB_.reset();
   }
 
+  var variableNames = [];
   var defvars = [];
   var variables = Blockly.Variables.allVariablesTypes(workspace);
   for (var i = 0; i < variables.length; i++) {
     var outputType = variables[i];
+    if(variableNames.indexOf(outputType[0]) >= 0) {
+      continue;
+    }
     var type = 'int';
     if (outputType[1] == 'Linkbot') {
       type = 'CLinkbot';
@@ -120,10 +124,10 @@ Blockly.Cpp.init = function(workspace) {
       type = 'double';
     } else if (outputType[1] == 'String') {
       type = 'std::string';
-    }
     } else if (outputType[1] == 'Integer') {
       type = 'int';
     }
+    variableNames.push(outputType[0]);
     defvars[i] = type + ' ' + 
         Blockly.Cpp.variableDB_.getName(outputType[0],
         Blockly.Variables.NAME_TYPE) + ';';
