@@ -28,39 +28,29 @@ goog.provide('Blockly.Ch.logic');
 
 goog.require('Blockly.Ch');
 
-
 Blockly.Ch['controls_if'] = function(block) {
   // If/elseif/else condition.
   var n = 0;
   var argument = Blockly.Ch.valueToCode(block, 'IF' + n,
       Blockly.Ch.ORDER_NONE) || 'false';
   var branch = Blockly.Ch.statementToCode(block, 'DO' + n);
-  var code = '.then( function() {\n' + 
-             '  return new Promise( function ( resolve, reject ) {\n' + 
-             '    if (' + argument + ') {\n' + 
-             '      Promise.resolve()\n' + 
-                    branch + 
-             '      .then( function() { resolve(); } );\n' + 
-             '    }';
+  var code = 'if ('+argument+') {\n' + 
+             branch + 
+             '}\n';
   for (n = 1; n <= block.elseifCount_; n++) {
     argument = Blockly.Ch.valueToCode(block, 'IF' + n,
         Blockly.Ch.ORDER_NONE) || 'false';
     branch = Blockly.Ch.statementToCode(block, 'DO' + n);
     code += ' else if (' + argument + ') {\n' + 
-            '  Promise.resolve()\n' + 
                branch + 
-            '  .then( function() { resolve(); } );\n' + 
-            '}';
+            '}\n';
   }
   if (block.elseCount_) {
     branch = Blockly.Ch.statementToCode(block, 'ELSE');
     code += ' else {\n' + 
-            '  Promise.resolve()\n' + 
                branch + 
-            '  .then( function() { resolve(); } );\n' + 
             ' }\n';
   }
-  code += '}); })\n';
   return code + '\n';
 };
 
@@ -139,3 +129,4 @@ Blockly.Ch['logic_ternary'] = function(block) {
   var code = value_if + ' ? ' + value_then + ' : ' + value_else;
   return [code, Blockly.Ch.ORDER_CONDITIONAL];
 };
+

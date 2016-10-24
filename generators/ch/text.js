@@ -32,6 +32,9 @@ goog.require('Blockly.Ch');
 Blockly.Ch['text'] = function(block) {
   // Text value.
   var code = Blockly.Ch.quote_(block.getFieldValue('TEXT'));
+  // Change the single-quotes to double-quotes
+  code = code.replace(/^\'/, '\"');
+  code = code.replace(/\'$/, '\"');
   return [code, Blockly.Ch.ORDER_ATOMIC];
 };
 
@@ -230,14 +233,7 @@ Blockly.Ch['text_print'] = function(block) {
   // Print statement.
   var argument0 = Blockly.Ch.valueToCode(block, 'TEXT',
       Blockly.Ch.ORDER_NONE) || '\'\'';
-  return '.then( function() { \n' + 
-         '    var con = document.getElementById("console");\n' + 
-         '    if(con) {\n' + 
-         '        con.innerText = con.innerText + '+argument0+' + "\\n";\n' + 
-         '    }\n' + 
-         '    console.log('+argument0+');\n' + 
-         '    return Promise.resolve();\n' + 
-         '})\n';
+  return 'cout << ' + argument0 + ' << "\n";';
 };
 
 Blockly.Ch['text_prompt_ext'] = function(block) {
