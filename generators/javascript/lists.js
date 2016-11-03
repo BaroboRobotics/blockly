@@ -215,7 +215,13 @@ Blockly.JavaScript['lists_setIndex'] = function(block) {
       code += list + '[' + list + '.length - 1] = ' + value + ';\n';
       return code;
     } else if (mode == 'INSERT') {
-      return list + '.push(' + value + ');\n';
+      var code = '.then( function() { \n' + 
+                 '    return Promise.resolve('+value+')\n' + 
+                 '    .then( function( assignment_argument ) { \n' + 
+                 '        '+list+'.push(assignment_argument);\n' + 
+                 '    });\n' + 
+                 '})\n';
+      return code;
     }
   } else if (where == 'FROM_START') {
     // Blockly uses one-based indicies.
@@ -227,7 +233,13 @@ Blockly.JavaScript['lists_setIndex'] = function(block) {
       at += ' - 1';
     }
     if (mode == 'SET') {
-      return list + '[' + at + '] = ' + value + ';\n';
+      var code = '.then( function() { \n' + 
+                 '    return Promise.resolve('+value+')\n' + 
+                 '    .then( function( assignment_argument ) { \n' + 
+                 '        '+list+'['+at+'] = assignment_argument;\n' + 
+                 '    });\n' + 
+                 '})\n';
+      return code;
     } else if (mode == 'INSERT') {
       return list + '.splice(' + at + ', 0, ' + value + ');\n';
     }
