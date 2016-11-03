@@ -86,7 +86,7 @@ Blockly.Input.prototype.appendField = function(field, opt_name) {
   }
   field.setSourceBlock(this.sourceBlock_);
   if (this.sourceBlock_.rendered) {
-    field.init();
+    field.init(field);
   }
   field.name = opt_name;
 
