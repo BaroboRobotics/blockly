@@ -86,7 +86,7 @@ Blockly.FieldDropdown.prototype.init = function(block) {
   }
   // Add dropdown arrow: "option ▾" (LTR) or "▾ אופציה" (RTL)
   this.arrow_ = Blockly.createSvgElement('tspan', {}, null);
-  if(block.RTL) {
+  if(("RTL" in block) && block.RTL) {
       this.arrow_.appendChild(document.createTextNode(
           Blockly.FieldDropdown.ARROW_CHAR + ' '));
   } else {
