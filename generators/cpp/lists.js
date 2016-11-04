@@ -191,8 +191,6 @@ Blockly.Cpp['lists_setIndex'] = function(block) {
   // Set element at index.
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
 
-  return '//Warning: lists_setIndex not implemented for C++.\n';
-
   var list = Blockly.Cpp.valueToCode(block, 'LIST',
       Blockly.Cpp.ORDER_MEMBER) || '[]';
   var mode = block.getFieldValue('MODE') || 'GET';
