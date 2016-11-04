@@ -31,7 +31,7 @@ goog.require('Blockly.Cpp');
 
 Blockly.Cpp['lists_create_empty'] = function(block) {
   // Create an empty list.
-  return ['[]', Blockly.Cpp.ORDER_ATOMIC];
+  return ['std::vector<double>{}', Blockly.Cpp.ORDER_ATOMIC];
 };
 
 Blockly.Cpp['lists_create_with'] = function(block) {
@@ -41,12 +41,14 @@ Blockly.Cpp['lists_create_with'] = function(block) {
     code[n] = Blockly.Cpp.valueToCode(block, 'ADD' + n,
         Blockly.Cpp.ORDER_COMMA) || 'null';
   }
-  code = '[' + code.join(', ') + ']';
+  code = '{' + code.join(', ') + '}';
   return [code, Blockly.Cpp.ORDER_ATOMIC];
 };
 
 Blockly.Cpp['lists_repeat'] = function(block) {
   // Create a list with one element repeated.
+  return '//Warning: lists_repeat not implemented for C++.\n';
+
   var functionName = Blockly.Cpp.provideFunction_(
       'lists_repeat',
       [ 'function ' + Blockly.Cpp.FUNCTION_NAME_PLACEHOLDER_ +
@@ -69,17 +71,19 @@ Blockly.Cpp['lists_length'] = function(block) {
   // String or array length.
   var argument0 = Blockly.Cpp.valueToCode(block, 'VALUE',
       Blockly.Cpp.ORDER_FUNCTION_CALL) || '[]';
-  return [argument0 + '.length', Blockly.Cpp.ORDER_MEMBER];
+  return [argument0 + '.size();\n', Blockly.Cpp.ORDER_MEMBER];
 };
 
 Blockly.Cpp['lists_isEmpty'] = function(block) {
   // Is the string null or array empty?
   var argument0 = Blockly.Cpp.valueToCode(block, 'VALUE',
       Blockly.Cpp.ORDER_MEMBER) || '[]';
-  return ['!' + argument0 + '.length', Blockly.Cpp.ORDER_LOGICAL_NOT];
+  return ['!' + argument0 + '.size()', Blockly.Cpp.ORDER_LOGICAL_NOT];
 };
 
 Blockly.Cpp['lists_indexOf'] = function(block) {
+  return '//Warning: lists_indexOf not implemented for C++.\n';
+
   // Find an item in the list.
   var operator = block.getFieldValue('END') == 'FIRST' ?
       'indexOf' : 'lastIndexOf';
@@ -94,6 +98,9 @@ Blockly.Cpp['lists_indexOf'] = function(block) {
 Blockly.Cpp['lists_getIndex'] = function(block) {
   // Get element at index.
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
+
+  return '//Warning: lists_getIndex not implemented for C++.\n';
+
   var mode = block.getFieldValue('MODE') || 'GET';
   var where = block.getFieldValue('WHERE') || 'FROM_START';
   var at = Blockly.Cpp.valueToCode(block, 'AT',
@@ -183,6 +190,9 @@ Blockly.Cpp['lists_getIndex'] = function(block) {
 Blockly.Cpp['lists_setIndex'] = function(block) {
   // Set element at index.
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
+
+  return '//Warning: lists_setIndex not implemented for C++.\n';
+
   var list = Blockly.Cpp.valueToCode(block, 'LIST',
       Blockly.Cpp.ORDER_MEMBER) || '[]';
   var mode = block.getFieldValue('MODE') || 'GET';
@@ -215,7 +225,7 @@ Blockly.Cpp['lists_setIndex'] = function(block) {
       code += list + '[' + list + '.length - 1] = ' + value + ';\n';
       return code;
     } else if (mode == 'INSERT') {
-      return list + '.push(' + value + ');\n';
+      return list + '.push_back(' + value + ');\n';
     }
   } else if (where == 'FROM_START') {
     // Blockly uses one-based indicies.

@@ -126,6 +126,8 @@ Blockly.Cpp.init = function(workspace) {
       type = 'std::string';
     } else if (outputType[1] == 'Integer') {
       type = 'int';
+    } else if (outputType[1] == 'Array') {
+      type = 'std::vector<double>';
     }
     variableNames.push(outputType[0]);
     defvars[i] = type + ' ' + 
