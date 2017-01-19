@@ -236,6 +236,7 @@ Blockly.JavaScript['text_print'] = function(block) {
       Blockly.JavaScript.ORDER_NONE) || '\'\'';
   return '.then( function() { \n' + 
          '    app.log(' + argument0 + ');' + 
+         '    app.log("\\n");' + 
          '    return Promise.resolve();\n' + 
          '})\n';
 };
