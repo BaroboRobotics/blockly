@@ -69,7 +69,11 @@ Blockly.JavaScript['text_append'] = function(block) {
       block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
   var argument0 = Blockly.JavaScript.valueToCode(block, 'TEXT',
       Blockly.JavaScript.ORDER_NONE) || '\'\'';
-  return varName + ' = String(' + varName + ') + String(' + argument0 + ');\n';
+  //return varName + ' = String(' + varName + ') + String(' + argument0 + ');\n';
+  return '.then( function() {\n' + 
+         '    '+ varName + ' = String(' + varName + ') + String(' + argument0 + ');\n' + 
+         '    return Promise.resolve();\n' + 
+         '})\n';
 };
 
 Blockly.JavaScript['text_length'] = function(block) {
