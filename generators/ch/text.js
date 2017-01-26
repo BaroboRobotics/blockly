@@ -233,7 +233,7 @@ Blockly.Ch['text_print'] = function(block) {
   // Print statement.
   var argument0 = Blockly.Ch.valueToCode(block, 'TEXT',
       Blockly.Ch.ORDER_NONE) || '\'\'';
-  return 'cout << ' + argument0 + ' << "\n";';
+  return 'cout << ' + argument0 + ' << "\\n";';
 };
 
 Blockly.Ch['text_prompt_ext'] = function(block) {
